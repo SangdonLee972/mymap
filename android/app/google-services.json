@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550855798481",
+    "project_id": "pokermy-b50c0",
+    "storage_bucket": "pokermy-b50c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550855798481:android:1f36968c41d27a5ac55ff0",
+        "android_client_info": {
+          "package_name": "com.pokercmg31.pokerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgsCNN8O5gLfwUNq-s5IxAGreZGR6ikuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
