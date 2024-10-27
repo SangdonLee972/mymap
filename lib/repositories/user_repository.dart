@@ -10,7 +10,7 @@ class UserRepository {
   }
 
   // Firestore에서 사용자 정보를 불러옴
-  Future<CustomUser?> getUserData(String uid) async {
+  Future<CustomUser?> fetchUserFromFirestore(String uid) async {
     DocumentSnapshot userDoc = await _firestore.collection('users').doc(uid).get();
     if (userDoc.exists) {
       return CustomUser.fromFirestore(userDoc.data() as Map<String, dynamic>, userDoc.id);
