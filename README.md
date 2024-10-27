@@ -1,3 +1,5 @@
+# env 안했으니까 키값 쓰지말아주세요 ㅠㅠ
+
 # pokerapp
 
 A new Flutter project.
