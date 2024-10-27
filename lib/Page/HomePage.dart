@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:pokerapp/Page/PokerRoomPage/PokerRoomListPage.dart';
 import 'package:pokerapp/models/user.dart';
 import 'package:pokerapp/service/auth_service.dart';
 
@@ -18,10 +19,8 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-         
             SizedBox(height: 16),
             // 주요 서비스 섹션
-     
             Text(
               '주요 서비스',
               style: GoogleFonts.poppins(
@@ -36,7 +35,7 @@ class HomePage extends StatelessWidget {
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
               children: [
-                _buildServiceIcon(FontAwesomeIcons.gift, '선물하기', screenWidth, context, _giftAction),
+                _buildServiceIcon(FontAwesomeIcons.gift, '선물하기', screenWidth, context, () => _giftAction(context)),
                 _buildServiceIcon(FontAwesomeIcons.shoppingBag, '쇼핑', screenWidth, context, _shoppingAction),
                 _buildServiceIcon(FontAwesomeIcons.bicycle, '자전거 대여', screenWidth, context, _rentBikeAction),
                 _buildServiceIcon(FontAwesomeIcons.moneyBill, 'ATM 찾기', screenWidth, context, _findATMAction),
@@ -80,13 +79,16 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  // 버튼 클릭 시 실행할 개별 핸들러 함수들
-  void _navigateToEventPage(BuildContext context) {
-    // 이벤트 페이지로 이동하는 네비게이터 코드
-  }
 
-  void _giftAction() {
+
+  // 버튼 클릭 시 실행할 개별 핸들러 함수들
+  void _giftAction(BuildContext context) {
     print("선물하기 클릭됨");
+
+       Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PokerRoomListPage()),
+    );
     // 선물하기 기능 구현
   }
 

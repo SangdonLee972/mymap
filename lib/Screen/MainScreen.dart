@@ -50,6 +50,8 @@ class MainScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("메인 페이지"),
+                automaticallyImplyLeading: false, // 뒤로 가기 버튼을 비활성화
+
         actions: [
           IconButton(
             icon: Icon(Icons.logout),

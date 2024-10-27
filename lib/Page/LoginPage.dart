@@ -34,7 +34,10 @@ class _LoginPageState extends State<LoginPage> {
 
   // Navigate to MainScreen on successful login
   void _navigateToMainPage() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainScreen()));
+                Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+            );
   }
 
   // Sign in with email and password
