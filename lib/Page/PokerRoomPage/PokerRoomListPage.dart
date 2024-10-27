@@ -1,5 +1,3 @@
-// pages/poker_room_list_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:pokerapp/Page/PokerRoomPage/PokerRoomDetailPage.dart';
 import 'package:pokerapp/models/PokerRoom.dart';
@@ -22,18 +20,21 @@ class _PokerRoomListPageState extends State<PokerRoomListPage> {
 
   Future<void> _createPokerRoom() async {
     final pokerRoom = PokerRoom(
-      id: '', // Firestore에서 자동 생성
+      id: '',
       name: 'New Poker Room',
       location: 'Las Vegas, NV',
-      logoUrl: 'https://example.com/logo.png', // 샘플 이미지 URL
+      logoUrl: 'https://example.com/logo.png',
       tables: 20,
       distance: 500.0,
-      tournamentImage: 'https://example.com/tournament.png', // 샘플 토너먼트 이미지 URL
+      tournamentImage: 'https://example.com/tournament.png',
+      supportsCashGames: false,
+      hasEvents: true,
+      hasTournaments: true,
     );
 
     await _pokerRoomService.addPokerRoom(pokerRoom);
     setState(() {
-      _futurePokerRooms = _pokerRoomService.getPokerRooms(); // 새로운 포커룸 리스트 가져오기
+      _futurePokerRooms = _pokerRoomService.getPokerRooms();
     });
   }
 
@@ -45,7 +46,7 @@ class _PokerRoomListPageState extends State<PokerRoomListPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: _createPokerRoom, // 버튼 클릭 시 포커룸 생성
+            onPressed: _createPokerRoom,
           ),
         ],
       ),
@@ -62,18 +63,130 @@ class _PokerRoomListPageState extends State<PokerRoomListPage> {
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final room = snapshot.data![index];
-              return ListTile(
-                title: Text(room.name),
-                subtitle: Text(room.location),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PokerRoomDetailPage(room: room)),
-                ),
-              );
+              return _buildPokerRoomCard(room, context);
             },
           );
         },
       ),
+    );
+  }
+
+  Widget _buildPokerRoomCard(PokerRoom room, BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return GestureDetector(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PokerRoomDetailPage(room: room)),
+      ),
+      child: Card(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 상단 파란색 바
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 4),
+                color: Colors.blue.shade900,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Live info + Wait List Registration",
+                      style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.03),
+                    ),
+                    Icon(Icons.announcement, color: Colors.white, size: screenWidth * 0.04),
+                  ],
+                ),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  // 포커룸 로고 이미지
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(room.logoUrl),
+                    radius: screenWidth * 0.07,
+                  ),
+                  SizedBox(width: 12),
+                  // 포커룸 정보
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          room.name,
+                          style: TextStyle(fontSize: screenWidth * 0.04, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          room.location,
+                          style: TextStyle(color: Colors.grey.shade700, fontSize: screenWidth * 0.03),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // 거리 정보
+                  Text(
+                    '${room.distance.toStringAsFixed(2)} km',
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: screenWidth * 0.03),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Divider(color: Colors.grey.shade400),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildInfoColumn('Tables', '${room.tables}', screenWidth),
+                  _buildConditionalIcon(room.supportsCashGames, 'Cash', Icons.attach_money, screenWidth),
+                  _buildConditionalIcon(room.hasTournaments, 'Tourneys', Icons.emoji_events, screenWidth),
+                  _buildConditionalIcon(room.hasEvents, 'Events', Icons.event, screenWidth),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoColumn(String label, dynamic value, double screenWidth, {bool isFaded = false}) {
+    final textColor = isFaded ? Colors.grey : Colors.black;
+    final iconColor = isFaded ? Colors.grey : Colors.blueAccent;
+
+    return Column(
+      children: [
+        value is IconData
+            ? Icon(value, size: screenWidth * 0.06, color: iconColor)
+            : Text(
+                value,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: screenWidth * 0.04,
+                  color: textColor,
+                ),
+              ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            color: isFaded ? Colors.grey : Colors.grey.shade600,
+            fontSize: screenWidth * 0.03,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildConditionalIcon(bool isVisible, String label, IconData icon, double screenWidth) {
+    return _buildInfoColumn(
+      label,
+      icon,
+      screenWidth,
+      isFaded: !isVisible, // false이면 회색, true이면 선명하게
     );
   }
 }

@@ -8,6 +8,9 @@ class PokerRoom {
   final int tables;
   final double distance;
   final String? tournamentImage; // 관리자 권한으로 업로드된 토너먼트 이미지
+  final bool supportsCashGames;
+  final bool hasEvents;
+  final bool hasTournaments;
 
   PokerRoom({
     required this.id,
@@ -17,6 +20,9 @@ class PokerRoom {
     required this.tables,
     required this.distance,
     this.tournamentImage,
+    this.supportsCashGames = false,
+    this.hasEvents = false,
+    this.hasTournaments = false,
   });
 
   // Firestore에서 데이터를 가져와 PokerRoom 객체로 변환하는 팩토리 메서드
@@ -29,6 +35,9 @@ class PokerRoom {
       tables: json['tables'],
       distance: json['distance'].toDouble(),
       tournamentImage: json['tournamentImage'],
+      supportsCashGames: json['supportsCashGames'] ?? false,
+      hasEvents: json['hasEvents'] ?? false,
+      hasTournaments: json['hasTournaments'] ?? false,
     );
   }
 
@@ -41,6 +50,9 @@ class PokerRoom {
       'tables': tables,
       'distance': distance,
       'tournamentImage': tournamentImage,
+      'supportsCashGames': supportsCashGames,
+      'hasEvents': hasEvents,
+      'hasTournaments': hasTournaments,
     };
   }
 }
